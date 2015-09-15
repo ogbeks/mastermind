@@ -1,28 +1,167 @@
 require "colorize"
 class GameLogic
+  COLORS = ["R", "G", "B", "Y", "O", "P","I", "C"]
   def self.level_picker(choice)
     case choice
       when "1"
-        puts "i am coming home"
-
+           secret_code =Computer.generated_code(1)
+           p secret_code
+        display_code = secret_code.sort
+        puts "I have generated a beginner sequence with #{secret_code.size} elements made up of:
+    #{GameLogic.displayer_code(display_code)}. You are to guess the sequence in which
+     these colors appeared e.g #{display_code.join} for #{GameLogic.displayer_code(display_code)}.
+     You have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any
+      time to end the game."
+      puts "Ready to play?"
+      puts "What's your guess?"
+        number_trial = 12
+        while(number_trial!=0)
+            player_guess= gets.chomp
+            player_guess.upcase!
+            #case player_guess
+            if player_guess=="Q" or player_guess=="QUIT"
+                puts "Oops! You quit"
+                number_trial =0
+                #p Computer.generated_color(4)
+            elsif player_guess.length < 4
+                puts "Your input is too short."
+                  puts "You have tried #{12-(number_trial)} time. You have #{number_trial} attempts left"
+            elsif player_guess.length > 4
+                puts "Your input is high"
+                  puts "You have tried #{12-(number_trial)} time. You have #{number_trial} attempts left"
+             elsif player_guess.length == 4 && (secret_code.join==player_guess)
+              #puts 'Start the game'
+              puts "Congratulation You made it"
+              number_trial=0
+            else
+              player_code =player_guess.split("")
+              exact_matcher = Evaluator.exact_match(secret_code,player_code)
+              total_matcher = Evaluator.total_match(secret_code,player_code)
+              partial_matcher = total_matcher - exact_matcher
+              number_trial-=1
+              if number_trial== 0
+                puts "You tried, but lost.".red
+              puts"The colors generated were #{secret_code.join}".yellow
+              puts "Want to try again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
+            elsif number_trial == 11
+                puts "You got #{exact_matcher} position exactly and #{partial_matcher} near matches"
+                puts "You have tried #{12-(number_trial)} time. You have #{number_trial} attempts left"
+                puts "Try again: "
+              else
+                puts "You got #{exact_matcher} position exactly and #{partial_matcher} near matches"
+                puts "You have tried #{12-(number_trial)} times. You have #{number_trial} attempts left"
+                puts "Try again: "
+              end
+            end
+        end
       when "2"
         puts "i am coming home"
       when "3"
         puts "i am coming home"
       when "quit","q"
-        return
+       puts "you quit without trying"
+       return
      else
       puts 'Invalid command'
       return
     end
   end
   def self.colors
-    ['R', 'O', 'Y', 'B', 'I', 'C', 'V']
+    ['R', 'O', 'Y', 'B', 'I', 'C', 'V','P','G']
+  end
+  def self.colors_in_word(color)
+        case color
+          when 'R'
+            return "(R)ed".red
+          when 'O'
+           return "(O)range".red
+          when 'Y'
+          return   "(Y)ellow".yellow
+          when 'G'
+          return   "(G)green".green
+          when 'B'
+          return   "(B)lue".blue
+          when 'P'
+          return   "(P)urple".magenta
+          when 'C'
+          return   "(C)yan".cyan
+          when 'I'
+          return   "(I)ndigo".magenta
+          when 'V'
+          return   "(V)iolet".cyan
+          else
+            "invalid color"
+        end
+    end
+    def self.displayer_code(color_array)
+      message = ""
+      color_array.each.with_index do |color,index|
+        if index!=color_array.size-1
+        message +=GameLogic.colors_in_word(color)+", "
+      else
+        message +="and "+GameLogic.colors_in_word(color)
+      end
+      end
+      message
+    end
+end
+module Evaluator
+  def self.exact_match(comp_secret_code, players_code)
+    num_exact_match = 0
+  zip_codes= comp_secret_code.zip(players_code)
+  zip_codes.each do |a,b|
+    if a==b
+      num_exact_match+=1
+    end
+  end
+  num_exact_match
+  end
+  def self.total_match(comp,user)
+    comp_hash=comp.reduce(Hash.new(0)) do |memo,ele|
+    memo[ele]+=1
+   memo
+end
+user_hash=user.reduce(Hash.new(0)) do |memo,ele|
+    memo[ele]+=1
+  memo
+end
+user_hashed = user_hash.select{|k,_| comp_hash.has_key? k}
+result =0
+user_hashed.each do |key, value|
+    if comp_hash[key] >= value
+        result +=value
+    else
+        result +=comp_hash[key]
+    end
+end
+result
   end
 end
 class Computer
   def self.random_color_picker(number)
     GameLogic.colors.sample(number)
+  end
+  def self.generated_code (level)
+    case level
+    when 1
+    GameLogic.colors.values_at(rand(4),rand(4),rand(4),rand(4))
+    when 2
+      GameLogic.colors.values_at(rand(5),rand(5),rand(5),rand(5),rand(5))
+    when 3
+      GameLogic.colors.values_at(rand(6),rand(6),rand(6),rand(6), rand(6), rand(6))
+    end
+  end
+  def self.generated_color(number)
+  colors = GameLogic::COLORS.shuffle
+  generated_code = []
+  number.times{ generated_code << colors.pop }
+  generated_code
+end
+end
+class Player
+  def self.guess_word(guess)
+    guess.upcase!
+    guess.split("")
   end
 end
 class Message
@@ -34,8 +173,8 @@ class Message
   def self.play_menu
     puts "\n ****To start the game select a level you would like to play:\n"
     puts "Enter (1) for "+"Beginner".yellow+","
-    puts "Enter (2) for "+"Intermediate".yellow+","
-    puts "Enter (3) for "+"Advanced".yellow
+    puts "Enter (2) for "+"Intermediate".cyan+","
+    puts "Enter (3) for "+"Advanced".red
     puts "or (q)uit to go back to the main menu"
   end
   def self.instruction
@@ -74,7 +213,7 @@ loop do
   when 'play','p'
     Message.play_menu
     player_choice = gets.chomp
-    GameLogic.level_picker(player_choice)
+   GameLogic.level_picker(player_choice)
     when 'instructions', 'i'
       Message.instruction
     when 'background', 'b'
