@@ -1,4 +1,14 @@
 module Level_trials
+  def self.display_sequence_level level
+    case level
+      when '1'
+      "BEGINNER".yellow
+      when '2'
+        "INTERMEDIATE".cyan
+      when '3'
+      "ADVANCED".red
+    end
+  end
   def self.introduction choice
     secret_code =Computer.generated_code(choice.to_i)
     p secret_code
@@ -6,7 +16,7 @@ module Level_trials
  color_display_code_in_array =Game_Color.unique_color_display(display_code)
  color_message =Game_Color.color_display_message(color_display_code_in_array)
 
- puts "I have generated a beginner sequence with #{secret_code.size} elements made up of:
+ puts "I have generated a #{Level_trials.display_sequence_level(choice)} sequence with #{secret_code.size} elements made up of:
 #{color_message}. You are to guess the sequence in which
 these colors appeared e.g #{color_display_code_in_array.join} for #{color_message}.
 You have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any
@@ -43,10 +53,15 @@ puts "What's your guess?"
               puts "You have tried #{player_trial} time. You have #{number_trial-player_trial} attempts left"
          elsif player_guess.length == secret_length && (secret_code.join==player_guess)
           #puts 'Start the game'
-          duration_time = (Time.now - start_timer).duration
+          duration_time = Time.now - start_timer
           player_trial+=1
-          puts "Congratulations! You guessed the sequence '#{player_guess}' in #{player_trial} guesses and in #{duration_time}"
+          puts "Congratulation! you guessed the sequence, what is your name?"
+          player_name = gets.chomp
+          new_player = Player.new(player_name, player_guess, player_trial, duration_time)
+          new_player_hash = new_player.convert_hash
+          puts "#{player_name}, You guessed the sequence '#{player_guess}' in #{player_trial} guesses and in #{duration_time.duration}"
           #puts "Want to play again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
+
           Trial_message.end_game_option? choice
           stop = false
         else

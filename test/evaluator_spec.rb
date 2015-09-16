@@ -1,5 +1,5 @@
 require_relative "../module/evaluator_module"
-require_relative "../extending_ruby_object"
+require_relative "../extension/extending_ruby_object"
 describe Evaluator do
   context "evaluating on four computer generated color" do
     before(:each) do

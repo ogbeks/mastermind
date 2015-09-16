@@ -1,6 +1,6 @@
 require "colorize"
-require_relative "extending_ruby_object"
-require_relative "menu_message"
+require_relative "extension/extending_ruby_object"
+require_relative "module/menu_message_module"
 require_relative "module/evaluator_module"
 require_relative "module/color_module"
 require_relative "level_controller"
@@ -34,6 +34,16 @@ class Computer
   end
 end
 class Player
+  attr_accessor :guess, :name, :tries, :duration
+  def initialize (name,guess, tries, duration)
+    @name = name
+    @guess = guess
+    @tries =tries
+    @duration =duration
+  end
+  def convert_hash
+   Hash[[[:name, @name], [:guess, @guess], [:tries, @tries], [:duration, @duration]]]
+ end
   def self.guess_word(guess)
     guess.upcase!
     guess.split("")

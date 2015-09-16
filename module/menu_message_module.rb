@@ -1,21 +1,22 @@
-class Message
-  def self.menu
+module Message
+  module_function
+  def menu
     puts "\n================================Menu===================================="
     puts "\n\nWelcome to MASTERMIND GAME ".green+" By ".yellow+" Sammy Prodigy\n".red
     puts "Would you like to "+"(p)lay".green+", read the "+"(i)nstructions".blue+", read a little "+"(b)ackground".yellow+" on Mastermind or "+"(q)uit".red+"?"
   end
-  def self.play_menu
+  def play_menu
     puts "\n ****To start the game select a level you would like to play:\n"
     puts "Enter (1) for "+"Beginner".yellow+","
     puts "Enter (2) for "+"Intermediate".cyan+","
     puts "Enter (3) for "+"Advanced".red
     puts "or (q)uit to go back to the main menu"
   end
-  def self.instruction
+  def instruction
     puts"Enter a sequence of 4 colors containing the generated colors e.g RYBG or YGRB."
     puts"If you enter "+"fewer than 4 or more than 4 colors".red+", you would receive an error message"
   end
-  def self.background
+  def background
     puts "\t\t\t\t Just a little background on MASTERMIND \n
      \t\tMastermind is a board game with an interesting history (or rather a legend?).
      Some game books report that it was invented in 1971 by Mordecai Meirowitz,

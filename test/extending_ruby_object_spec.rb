@@ -1,5 +1,5 @@
 
-require_relative "../extending_ruby_object"
+require_relative "../extension/extending_ruby_object"
 describe "Testing ruby extension class object" do
   context "Array converted to hash object" do
     color_one = ['R', 'R','B','Y','W']

@@ -4,7 +4,6 @@ class Numeric
     mins  = secs / 60
     hours = mins / 60
     days  = hours / 24
-
     if days > 0
       "#{days} days and #{hours % 24} hours"
     elsif hours > 0
