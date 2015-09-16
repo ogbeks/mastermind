@@ -13,10 +13,10 @@ You have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red
 time to end the game."
 puts "Ready to play?"
 puts "What's your guess?"
- Level_trials.trials(secret_code)
+ Level_trials.trials(secret_code, choice)
   end
 
-  def self.trials (secret_code)
+  def self.trials (secret_code, choice)
   start_timer = Time.now
   player_trial = 0
   number_trial = 12
@@ -47,7 +47,7 @@ puts "What's your guess?"
           player_trial+=1
           puts "Congratulations! You guessed the sequence '#{player_guess}' in #{player_trial} guesses and in #{duration_time}"
           #puts "Want to play again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-          Trial_message.end_game_option?
+          Trial_message.end_game_option? choice
           stop = false
         else
               player_code =player_guess.split("")
@@ -59,7 +59,7 @@ puts "What's your guess?"
               puts "You tried, but lost.".red
               puts"The colors generated were #{secret_code.join}".yellow
               #puts "Want to try again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-              Trial_message.end_game_option?
+              Trial_message.end_game_option? choice
               stop = false
             elsif player_trial == 1
               puts "#{player_guess} has #{total_matcher} correct elements with  #{exact_matcher} in the correct positions"

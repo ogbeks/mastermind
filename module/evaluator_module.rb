@@ -3,9 +3,7 @@ module Evaluator
     num_exact_match = 0
   zip_codes= comp_secret_code.zip(player_code)
   zip_codes.each do |a,b|
-    if a==b
-      num_exact_match+=1
-    end
+    a==b ? num_exact_match+=1 : num_exact_match
   end
   num_exact_match
   end
@@ -13,11 +11,7 @@ module Evaluator
     player_hashed = player_hash.select{|k,_| comp_hash.has_key? k}
     result =0
     player_hashed.each do |key, value|
-        if comp_hash[key] >= value
-            result +=value
-        else
-            result +=comp_hash[key]
-        end
+        comp_hash[key] >=value ? result +=value : result +=comp_hash[key]
     end
     result
   end

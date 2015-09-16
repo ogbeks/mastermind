@@ -1,17 +1,18 @@
 class Trial_message
-  def self.end_game_option?
+  def self.end_game_option? choice
     puts "Want to play again? (r)estart the game (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
+    choicer = choice
     option = gets.chomp
-    Trial_message.option_interpreter option
+    Trial_message.option_interpreter(option,choicer)
   end
-  def self.option_interpreter option
+  def self.option_interpreter(option,choice)
     case option
     when "p","play"
           GameLogic.level_option
     when "q","quit"
       false
     when "r","restart"
-      
+        Level_trials.introduction choice
     when "t","top_players"
       false
     else

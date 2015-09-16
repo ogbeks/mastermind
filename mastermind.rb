@@ -1,8 +1,8 @@
 require "colorize"
 require_relative "extending_ruby_object"
 require_relative "menu_message"
-require_relative "evaluator_module"
-require_relative "color_module"
+require_relative "module/evaluator_module"
+require_relative "module/color_module"
 require_relative "level_controller"
 require_relative "trial_message"
 class GameLogic
