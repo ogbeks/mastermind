@@ -3,6 +3,7 @@ require_relative "extension/extending_ruby_object"
 require_relative "module/menu_message_module"
 require_relative "module/evaluator_module"
 require_relative "module/color_module"
+require_relative "top_ten_module"
 require_relative "level_controller"
 require_relative "trial_message"
 class GameLogic

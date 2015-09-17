@@ -59,10 +59,10 @@ puts "What's your guess?"
           player_name = gets.chomp
           new_player = Player.new(player_name, player_guess, player_trial, duration_time)
           new_player_hash = new_player.convert_hash
+          Top_ten.json_add(choice,new_player_hash)
           puts "#{player_name}, You guessed the sequence '#{player_guess}' in #{player_trial} guesses and in #{duration_time.duration}"
           #puts "Want to play again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-
-          Trial_message.end_game_option? choice
+          Trial_message.end_game_option? choice,new_player_hash
           stop = false
         else
               player_code =player_guess.split("")
