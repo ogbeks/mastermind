@@ -1,20 +1,19 @@
 module Message
+  QUIT_GAME = "Thanks for playing Mastermind!\n".green+"Goodbye!".yellow
+  INVALID_INPUT = "invalid command"
+  BACK_MENU = "Back to the main menu"
   module_function
   def menu
     puts "\n================================Menu===================================="
-    puts "\n\nWelcome to MASTERMIND GAME ".green+" By ".yellow+" Sammy Prodigy\n".red
+    puts "\nWelcome to MASTERMIND GAME ".green+" By ".yellow+" Sammy Prodigy\n".red
     puts "Would you like to "+"(p)lay".green+", read the "+"(i)nstructions".blue+", read a little "+"(b)ackground".yellow+" on Mastermind or "+"(q)uit".red+"?"
   end
   def play_menu
-    puts "\n ****To start the game select a level you would like to play:\n"
-    puts "Enter (1) for "+"Beginner".yellow+","
-    puts "Enter (2) for "+"Intermediate".cyan+","
-    puts "Enter (3) for "+"Advanced".red
-    puts "or (q)uit to go back to the main menu"
+    puts "\n ****To start the game select a level you would like to play:\n\n\tEnter (1) for "+"Beginner".yellow+",\n\tEnter (2) for "+"Intermediate".cyan+",\n\tEnter (3) for "+"Advanced".red
+    puts "or (q)uit to go back to the main menu".red
   end
   def instruction
-    puts"Enter a sequence of 4 colors containing the generated colors e.g RYBG or YGRB."
-    puts"If you enter "+"fewer than 4 or more than 4 colors".red+", you would receive an error message"
+    puts"Enter a sequence of 4 colors containing the generated colors e.g RYBG or YGRB.\nIf you enter "+"fewer than 4 or more than 4 colors".red+", you would receive an error message"
   end
   def background
     puts "\t\t\t\t Just a little background on MASTERMIND \n

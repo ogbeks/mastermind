@@ -1,13 +1,7 @@
-module Level_trials
+module Level_Controller
+  DISPLAY_LEVEL = {'1'=>"BEGINNER".yellow, '2'=>"INTERMEDIATE".cyan, '3'=>"ADVANCED".red}
   def self.display_sequence_level level
-    case level
-      when '1'
-      "BEGINNER".yellow
-      when '2'
-        "INTERMEDIATE".cyan
-      when '3'
-      "ADVANCED".red
-    end
+    DISPLAY_LEVEL[level]
   end
   def self.introduction choice
     secret_code =Computer.generated_code(choice.to_i)
@@ -15,77 +9,37 @@ module Level_trials
  display_code = secret_code.sort
  color_display_code_in_array =Game_Color.unique_color_display(display_code)
  color_message =Game_Color.color_display_message(color_display_code_in_array)
-
- puts "I have generated a #{Level_trials.display_sequence_level(choice)} sequence with #{secret_code.size} elements made up of:
-#{color_message}. You are to guess the sequence in which
-these colors appeared e.g #{color_display_code_in_array.join} for #{color_message}.
-You have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any
-time to end the game."
-puts "Ready to play?"
-puts "What's your guess?"
- Level_trials.trials(secret_code, choice)
+ puts "I have generated a #{display_sequence_level(choice)} sequence with #{secret_code.size} elements made up of: #{color_message}. You are to guess the sequence in which these colors appeared e.g #{color_display_code_in_array.join} for #{color_message}.\nYou have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any time to end the game.\nReady to play?\nWhat's your guess?"
+ trials(secret_code, choice)
   end
-
+  def self.generate_temp_hash choice,secret_code
+    temp_record_hash = {}
+    temp_record_hash[:start_timer] = Time.now
+    temp_record_hash[:level_choice]= choice
+    temp_record_hash[:secret_code]=secret_code.join
+    temp_record_hash[:trials] = 0
+    temp_record_hash
+  end
   def self.trials (secret_code, choice)
-  start_timer = Time.now
-  player_trial = 0
-  number_trial = 12
-  secret_length = secret_code.length
-  stop = true
+      temp_record_hash=generate_temp_hash choice,secret_code
+      stop = true
   while(stop)
-      player_guess= gets.chomp
-      player_guess.upcase!
-      #case player_guess
-        if player_guess=="Q" or player_guess=="QUIT"
+      temp_record_hash[:player_guess]= (gets.chomp).upcase
+        if temp_record_hash[:player_guess]=="Q" or temp_record_hash[:player_guess]=="QUIT"
             puts "Oops! You quit"
             stop =false
-
-        elsif player_guess =="C" or player_guess=="CHEAT"
-          puts "Hmm! You just cheated. The colors were #{secret_code.join}".red
+        elsif temp_record_hash[:player_guess] =="C" or temp_record_hash[:player_guess]=="CHEAT"
+          puts "Hmm! You just cheated. The colors were #{temp_record_hash[:secret_code]}".red
           stop =false
-
-            #p Computer.generated_color(4)
-        elsif player_guess.length < secret_length
-            puts "Your input is too short."
-              puts "You have tried #{player_trial} time. You have #{number_trial-player_trial} attempts left"
-        elsif player_guess.length > secret_length
-            puts "Your input is high"
-              puts "You have tried #{player_trial} time. You have #{number_trial-player_trial} attempts left"
-         elsif player_guess.length == secret_length && (secret_code.join==player_guess)
-          #puts 'Start the game'
-          duration_time = Time.now - start_timer
-          player_trial+=1
-          puts "Congratulation! you guessed the sequence, what is your name?"
-          player_name = gets.chomp
-          new_player = Player.new(player_name, player_guess, player_trial, duration_time)
-          new_player_hash = new_player.convert_hash
-          Top_ten.json_add(choice,new_player_hash)
-          puts "#{player_name}, You guessed the sequence '#{player_guess}' in #{player_trial} guesses and in #{duration_time.duration}"
-          #puts "Want to play again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-          Trial_message.end_game_option? choice,new_player_hash
+        elsif temp_record_hash[:player_guess].length < temp_record_hash[:secret_code].length
+            puts "Your input is too short.\nYou have tried #{temp_record_hash[:trials]} time. You have #{12-temp_record_hash[:trials]} attempts left"
+        elsif temp_record_hash[:player_guess].length > temp_record_hash[:secret_code].length
+            puts "Your input is high\nYou have tried #{temp_record_hash[:trials]} time. You have #{12-temp_record_hash[:trials]} attempts left"
+         elsif temp_record_hash[:player_guess].length == temp_record_hash[:secret_code].length && (temp_record_hash[:secret_code]==temp_record_hash[:player_guess])
+          Evaluate.player_win temp_record_hash
           stop = false
         else
-              player_code =player_guess.split("")
-              exact_matcher = Evaluator.exact_match(secret_code,player_code)
-              total_matcher = Evaluator.total_match(secret_code,player_code)
-              partial_matcher = total_matcher - exact_matcher
-              player_trial+=1
-            if player_trial== 12
-              puts "You tried, but lost.".red
-              puts"The colors generated were #{secret_code.join}".yellow
-              #puts "Want to try again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-              Trial_message.end_game_option? choice
-              stop = false
-            elsif player_trial == 1
-              puts "#{player_guess} has #{total_matcher} correct elements with  #{exact_matcher} in the correct positions"
-              puts "You have tried #{player_trial} time. You have #{number_trial-player_trial} attempts left"
-              puts "Try again: "
-            else
-              #puts "You got #{exact_matcher} position exactly and #{partial_matcher} near matches"
-              puts "#{player_guess} has #{total_matcher} correct elements with  #{exact_matcher} in the correct positions"
-              puts "You have tried #{player_trial} times. You have #{number_trial-player_trial} attempts left"
-              puts "Try again: "
-            end
+            stop = Evaluate.player_code_valid (temp_record_hash)
         end
     end
   end

@@ -12,9 +12,9 @@ class Trial_message
     when "q","quit"
       false
     when "r","restart"
-        Level_trials.introduction choice
+        Level_Controller.introduction choice
     when "t","top_players"
-      top_players_message
+      top_players_message choice
       Top_ten.top_ten_by_level choice,new_player_hash
       false
     else
@@ -22,24 +22,11 @@ class Trial_message
       false
     end
   end
-  def self.top_players_message
+  def self.top_players_message level
+    lev_display=Level_Controller::DISPLAY_LEVEL[level]
     puts "======================================================================================="
-    puts "\t\t\t\tTOP TEN PLAYER LIST ~Beginner"
+    puts "\t\t\t\tTOP TEN PLAYER LIST ~#{lev_display}".yellow
     puts "======================================================================================="
   end
-  def num_of_tries number_trial
-    if number_trial== 0
-      puts "You tried, but lost.".red
-    puts"The colors generated were #{secret_code.join}".yellow
-    puts "Want to try again? (p)lay to start again or (q)uit to exit or (t)op_players to view the top ten players.".cyan
-  elsif number_trial == 11
-      puts "You got #{exact_matcher} position exactly and #{partial_matcher} near matches"
-      puts "You have tried #{12-(number_trial)} time. You have #{number_trial} attempts left"
-      puts "Try again: "
-    else
-      puts "You got #{exact_matcher} position exactly and #{partial_matcher} near matches"
-      puts "You have tried #{12-(number_trial)} times. You have #{number_trial} attempts left"
-      puts "Try again: "
-    end
-  end
+
 end
