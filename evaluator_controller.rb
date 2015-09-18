@@ -33,10 +33,10 @@ module Evaluate
         player_lost temp_record_hash
         false
       elsif temp_record_hash[:trials]== 1
-        puts "#{temp_record_hash[:player_guess]} has #{temp_record_hash[:total_matcher]} correct elements with  #{temp_record_hash[:exact_matcher]} in the correct positions\nYou have tried #{temp_record_hash[:trials]} time. You have #{12-temp_record_hash[:trials]} attempts left\nTry again: "
+        puts "#{temp_record_hash[:player_guess]} has "+"#{temp_record_hash[:total_matcher]}".yellow+" correct elements with  "+"#{temp_record_hash[:exact_matcher]}".green+" in the correct positions\nYou have tried #{temp_record_hash[:trials]} time. You have #{12-temp_record_hash[:trials]} attempts left\nTry again: "
         true
       else
-        puts "#{temp_record_hash[:player_guess]} has #{temp_record_hash[:total_matcher]} correct elements with  #{temp_record_hash[:exact_matcher]} in the correct positions\nYou have tried #{temp_record_hash[:trials]} times. You have #{12-temp_record_hash[:trials]} attempts left\nTry again: "
+        puts "#{temp_record_hash[:player_guess]} has "+"#{temp_record_hash[:total_matcher]}".yellow+" correct elements with "+" #{temp_record_hash[:exact_matcher]}".green+" in the correct positions\nYou have tried #{temp_record_hash[:trials]} times. You have #{12-temp_record_hash[:trials]} attempts left\nTry again: "
         true
       end
   end

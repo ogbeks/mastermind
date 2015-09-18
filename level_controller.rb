@@ -3,15 +3,16 @@ module Level_Controller
   def self.display_sequence_level level
     DISPLAY_LEVEL[level]
   end
+
   def self.introduction choice
     secret_code =Computer.generated_code(choice.to_i)
-    p secret_code
- display_code = secret_code.sort
- color_display_code_in_array =Game_Color.unique_color_display(display_code)
- color_message =Game_Color.color_display_message(color_display_code_in_array)
- puts "I have generated a #{display_sequence_level(choice)} sequence with #{secret_code.size} elements made up of: #{color_message}. You are to guess the sequence in which these colors appeared e.g #{color_display_code_in_array.join} for #{color_message}.\nYou have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any time to end the game.\nReady to play?\nWhat's your guess?"
- trials(secret_code, choice)
+    display_code = secret_code.sort
+    color_display_code_in_array =Game_Color.unique_color_display(display_code)
+    color_message =Game_Color.color_display_message(color_display_code_in_array)
+    puts "I have generated a #{display_sequence_level(choice)} sequence with #{secret_code.size} elements made up of: #{color_message}. You are to guess the sequence in which these colors appeared e.g #{color_display_code_in_array.join} for #{color_message}.\nYou have 12 guesses to get these colors or you lose the game. Use "+"(q)uit".red+" at any time to end the game.\nReady to play?\nWhat's your guess?"
+    trials(secret_code, choice)
   end
+
   def self.generate_temp_hash choice,secret_code
     temp_record_hash = {}
     temp_record_hash[:start_timer] = Time.now
@@ -30,7 +31,6 @@ module Level_Controller
             stop =false
         elsif temp_record_hash[:player_guess] =="C" or temp_record_hash[:player_guess]=="CHEAT"
           puts "Hmm! You just cheated. The colors were #{temp_record_hash[:secret_code]}".red
-          stop =false
         elsif temp_record_hash[:player_guess].length < temp_record_hash[:secret_code].length
             puts "Your input is too short.\nYou have tried #{temp_record_hash[:trials]} time. You have #{12-temp_record_hash[:trials]} attempts left"
         elsif temp_record_hash[:player_guess].length > temp_record_hash[:secret_code].length
